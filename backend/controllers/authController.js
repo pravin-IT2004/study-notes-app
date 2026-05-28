@@ -2,17 +2,10 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-// ======================
 // REGISTER
-// ======================
 const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
-
-    // Validation (IMPORTANT IMPROVEMENT)
-    if (!name || !email || !password) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -21,45 +14,23 @@ const register = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await User.create({
+    await User.create({
       name,
       email,
       password: hashedPassword,
     });
 
-    // 🔥 OPTIONAL: auto login after register (better UX)
-    const token = jwt.sign(
-      { id: user._id },
-      process.env.JWT_SECRET,
-      { expiresIn: "1d" }
-    );
-
-    res.status(201).json({
-      message: "Registered successfully",
-      token,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-      },
-    });
+    res.status(201).json({ message: "Registered successfully" });
 
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
-// ======================
 // LOGIN
-// ======================
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-
-    // Validation
-    if (!email || !password) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
 
     const user = await User.findOne({ email });
     if (!user) {
@@ -71,6 +42,7 @@ const login = async (req, res) => {
       return res.status(400).json({ message: "Invalid password" });
     }
 
+    // ✅ FIX: use env secret instead of hardcoded string
     const token = jwt.sign(
       { id: user._id },
       process.env.JWT_SECRET,
@@ -78,7 +50,6 @@ const login = async (req, res) => {
     );
 
     res.json({
-      message: "Login successful",
       token,
       user: {
         id: user._id,
