@@ -2,13 +2,19 @@ function NoteItem({ note, deleteNote }) {
   return (
     <div className="note-item">
       <h4>
-        {note.subject} - {note.topic}
+        {note?.subject} - {note?.topic}
       </h4>
 
-      <p>{note.generatedText}</p>
+      <p>
+        <strong>Type:</strong> {note?.type}
+      </p>
 
-      <button onClick={() => deleteNote(note._id)}>
-        🗑️ Delete
+      <p>{note?.generatedText}</p>
+
+      <button
+        onClick={() => deleteNote(note?._id)}
+      >
+        Delete
       </button>
     </div>
   );

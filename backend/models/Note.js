@@ -2,19 +2,24 @@ const mongoose = require("mongoose");
 
 const noteSchema = new mongoose.Schema(
   {
+    subject: {
+      type: String,
+      required: true,
+    },
+
     topic: {
       type: String,
       required: true,
     },
 
-    format: {
+    type: {
       type: String,
       required: true,
     },
 
-    content: {
+    generatedText: {
       type: String,
-      required: true,
+      default: "",
     },
   },
   {

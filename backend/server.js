@@ -1,7 +1,15 @@
+require("dotenv").config(); // MUST BE FIRST LINE
+
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-require("dotenv").config();
+
+// DEBUG: check env loading
+console.log("JWT SECRET CHECK:", process.env.JWT_SECRET);
+
+// Routes
+const noteRoutes = require("./routes/noteRoutes");
+const authRoutes = require("./routes/authRoutes");
 
 const app = express();
 
@@ -23,86 +31,18 @@ app.get("/", (req, res) => {
 // ======================
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB Connected"))
-  .catch((err) => console.log("MongoDB Error:", err));
+  .then(() => {
+    console.log("MongoDB Connected Successfully");
+  })
+  .catch((err) => {
+    console.log("MongoDB Error:", err);
+  });
 
 // ======================
-// SCHEMA + MODEL (UPDATED)
+// ROUTES
 // ======================
-const noteSchema = new mongoose.Schema({
-  subject: {
-    type: String,
-    required: true,
-  },
-  topic: {
-    type: String,
-    required: true,
-  },
-  type: {
-    type: String,
-    required: true, // bullet / qa / detailed
-  },
-  generatedText: {
-    type: String,
-    default: "",
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
-
-const Note = mongoose.model("Note", noteSchema);
-
-// ======================
-// CREATE NOTE
-// ======================
-app.post("/notes", async (req, res) => {
-  try {
-    const note = new Note({
-      subject: req.body.subject,
-      topic: req.body.topic,
-      type: req.body.type,
-      generatedText:
-        req.body.generatedText ||
-        `Generated ${req.body.type} notes for ${req.body.topic}`,
-    });
-
-    await note.save();
-    res.status(201).json(note);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// ======================
-// GET ALL NOTES
-// ======================
-app.get("/notes", async (req, res) => {
-  try {
-    const notes = await Note.find().sort({ createdAt: -1 });
-    res.json(notes);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// ======================
-// DELETE NOTE
-// ======================
-app.delete("/notes/:id", async (req, res) => {
-  try {
-    const deleted = await Note.findByIdAndDelete(req.params.id);
-
-    if (!deleted) {
-      return res.status(404).json({ message: "Note not found" });
-    }
-
-    res.json({ message: "Deleted successfully" });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+app.use("/api/notes", noteRoutes);
+app.use("/api/auth", authRoutes);
 
 // ======================
 // SERVER START

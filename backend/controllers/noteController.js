@@ -1,21 +1,32 @@
 const Note = require("../models/Note");
 
-
-// CREATE
+// ======================
+// CREATE NOTE
+// ======================
 const createNote = async (req, res) => {
   try {
-    const { topic, format, content } = req.body;
+    const {
+      subject,
+      topic,
+      type,
+      generatedText,
+    } = req.body;
 
-    if (!topic || !format || !content) {
+    // VALIDATION
+    if (!subject || !topic || !type) {
       return res.status(400).json({
-        message: "All fields required",
+        message: "Subject, topic and type are required",
       });
     }
 
+    // CREATE NOTE
     const note = await Note.create({
+      subject,
       topic,
-      format,
-      content,
+      type,
+      generatedText:
+        generatedText ||
+        `Generated ${type} notes for ${topic}`,
     });
 
     res.status(201).json(note);
@@ -26,8 +37,9 @@ const createNote = async (req, res) => {
   }
 };
 
-
-// READ
+// ======================
+// GET NOTES
+// ======================
 const getNotes = async (req, res) => {
   try {
     const notes = await Note.find().sort({
@@ -42,14 +54,23 @@ const getNotes = async (req, res) => {
   }
 };
 
-
-// DELETE
+// ======================
+// DELETE NOTE
+// ======================
 const deleteNote = async (req, res) => {
   try {
-    await Note.findByIdAndDelete(req.params.id);
+    const deletedNote = await Note.findByIdAndDelete(
+      req.params.id
+    );
+
+    if (!deletedNote) {
+      return res.status(404).json({
+        message: "Note not found",
+      });
+    }
 
     res.json({
-      message: "Note deleted",
+      message: "Note deleted successfully",
     });
   } catch (error) {
     res.status(500).json({

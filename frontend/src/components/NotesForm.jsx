@@ -15,28 +15,19 @@ function NotesForm({ addNote }) {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5000/notes", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          subject,
-          topic,
-          type, // ✅ IMPORTANT FIX
-          generatedText: `Notes for ${subject} - ${topic} (${type})`,
-        }),
+      // ONLY SEND INPUT DATA
+      await addNote({
+        subject,
+        topic,
+        type,
       });
-
-      const data = await res.json();
-
-      addNote(data);
 
       setSubject("");
       setTopic("");
       setType("bullet");
+
     } catch (error) {
-      console.log("Error saving note:", error);
+      console.log(error);
     }
 
     setLoading(false);
@@ -46,22 +37,24 @@ function NotesForm({ addNote }) {
     <div className="card input-card">
       <h3>Generate Notes</h3>
 
-      {/* SUBJECT */}
       <input
+        type="text"
         placeholder="Subject"
         value={subject}
         onChange={(e) => setSubject(e.target.value)}
       />
 
-      {/* TOPIC */}
       <input
+        type="text"
         placeholder="Topic"
         value={topic}
         onChange={(e) => setTopic(e.target.value)}
       />
 
-      {/* TYPE SELECTION (NEW IMPORTANT FEATURE) */}
-      <select value={type} onChange={(e) => setType(e.target.value)}>
+      <select
+        value={type}
+        onChange={(e) => setType(e.target.value)}
+      >
         <option value="bullet">Bullet Points</option>
         <option value="qa">Q & A</option>
         <option value="detailed">Detailed Notes</option>
