@@ -1,30 +1,50 @@
-require("dotenv").config(); // MUST BE FIRST LINE
+require("dotenv").config(); // MUST BE FIRST
 
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
-// DEBUG: check env loading
-console.log("JWT SECRET CHECK:", process.env.JWT_SECRET);
-
-// Routes
-const noteRoutes = require("./routes/noteRoutes");
-const authRoutes = require("./routes/authRoutes");
-
 const app = express();
+
+// ======================
+// DEBUG ENV CHECK
+// ======================
+console.log("JWT SECRET CHECK:", process.env.JWT_SECRET);
 
 // ======================
 // MIDDLEWARE
 // ======================
-app.use(cors());
 app.use(express.json());
+
+// ✅ Improved CORS (safe for Vercel + Render)
+app.use(
+  cors({
+    origin: "*", // You can replace with your Vercel URL for stricter security
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 
 // ======================
 // TEST ROUTE
 // ======================
 app.get("/", (req, res) => {
-  res.send("Backend Server Running");
+  res.send("Backend Server Running Successfully 🚀");
 });
+
+// Optional health check (GOOD FOR VIVA)
+app.get("/health", (req, res) => {
+  res.json({ status: "OK", message: "Server is healthy" });
+});
+
+// ======================
+// ROUTES
+// ======================
+const noteRoutes = require("./routes/noteRoutes");
+const authRoutes = require("./routes/authRoutes");
+
+app.use("/api/notes", noteRoutes);
+app.use("/api/auth", authRoutes);
 
 // ======================
 // MONGODB CONNECTION
@@ -32,17 +52,11 @@ app.get("/", (req, res) => {
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
-    console.log("MongoDB Connected Successfully");
+    console.log("MongoDB Connected Successfully ✅");
   })
   .catch((err) => {
-    console.log("MongoDB Error:", err);
+    console.error("MongoDB Connection Error ❌:", err.message);
   });
-
-// ======================
-// ROUTES
-// ======================
-app.use("/api/notes", noteRoutes);
-app.use("/api/auth", authRoutes);
 
 // ======================
 // SERVER START
@@ -50,5 +64,5 @@ app.use("/api/auth", authRoutes);
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT} 🚀`);
 });
