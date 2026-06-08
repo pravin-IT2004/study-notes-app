@@ -23,15 +23,24 @@ function Login({ setToken }) {
   };
 
   return (
-    <div className="card input-card">
-      <h3>Login</h3>
+    <div className="auth-page login">
+      <div className="auth-card">
+        <h2>👋 Welcome Back</h2>
+        <p>Login to continue</p>
 
-      <input placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
-      <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
+        <input
+          placeholder="Email"
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
-      <button className="btn-primary full" onClick={handleLogin}>
-        Login
-      </button>
+        <input
+          type="password"
+          placeholder="Password"
+          onChange={(e) => setPassword(e.target.value)}
+        />
+
+        <button onClick={handleLogin}>Login</button>
+      </div>
     </div>
   );
 }

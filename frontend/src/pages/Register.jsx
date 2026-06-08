@@ -17,16 +17,29 @@ function Register() {
   };
 
   return (
-    <div className="card input-card">
-      <h3>Register</h3>
+    <div className="auth-page register">
+      <div className="auth-card">
+        <h2>🚀 Create Account</h2>
+        <p>Start your AI Notes journey</p>
 
-      <input placeholder="Name" onChange={(e) => setName(e.target.value)} />
-      <input placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
-      <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
+        <input
+          placeholder="Name"
+          onChange={(e) => setName(e.target.value)}
+        />
 
-      <button className="btn-primary full" onClick={handleRegister}>
-        Register
-      </button>
+        <input
+          placeholder="Email"
+          onChange={(e) => setEmail(e.target.value)}
+        />
+
+        <input
+          type="password"
+          placeholder="Password"
+          onChange={(e) => setPassword(e.target.value)}
+        />
+
+        <button onClick={handleRegister}>Register</button>
+      </div>
     </div>
   );
 }

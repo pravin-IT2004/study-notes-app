@@ -344,3 +344,91 @@ textarea {
     width: fit-content;
   }
 }
+/* RESET */
+body {
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* COMMON PAGE */
+.auth-page {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.6s ease;
+}
+
+/* LOGIN BACKGROUND */
+.login {
+  background: linear-gradient(135deg, #0ea5e9, #6366f1, #8b5cf6);
+  background-size: 400% 400%;
+  animation: gradientMove 8s ease infinite;
+}
+
+/* REGISTER BACKGROUND */
+.register {
+  background: linear-gradient(135deg, #f97316, #ef4444, #ec4899);
+  background-size: 400% 400%;
+  animation: gradientMove 8s ease infinite;
+}
+
+/* CARD */
+.auth-card {
+  width: 320px;
+  padding: 30px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  text-align: center;
+  color: white;
+}
+
+/* TITLE */
+.auth-card h2 {
+  margin-bottom: 5px;
+}
+
+/* INPUT */
+.auth-card input {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 10px;
+  outline: none;
+}
+
+/* BUTTON */
+.auth-card button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 10px;
+  background: white;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.auth-card button:hover {
+  transform: scale(1.05);
+  background: #000;
+  color: white;
+}
+
+/* BACKGROUND ANIMATION */
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* FADE IN */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
