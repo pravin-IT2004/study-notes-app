@@ -1,19 +1,26 @@
 import { useState } from "react";
 
+const API_URL = "https://study-notes-app-1.onrender.com/api/auth";
+
 function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleRegister = async () => {
-    const res = await fetch("http://localhost:5000/api/auth/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, password }),
-    });
+    try {
+      const res = await fetch(`${API_URL}/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password }),
+      });
 
-    const data = await res.json();
-    alert(data.message);
+      const data = await res.json();
+      alert(data.message || "Registered successfully");
+    } catch (error) {
+      console.error("Register error:", error);
+      alert("Something went wrong");
+    }
   };
 
   return (

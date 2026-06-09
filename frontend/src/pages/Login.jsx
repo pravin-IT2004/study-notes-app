@@ -1,24 +1,31 @@
 import { useState } from "react";
 
+const API_URL = "https://study-notes-app-1.onrender.com/api/auth";
+
 function Login({ setToken }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
-    const res = await fetch("http://localhost:5000/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      const res = await fetch(`${API_URL}/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (data.token) {
-      localStorage.setItem("token", data.token);
-      setToken(data.token);
-      alert("Login successful");
-    } else {
-      alert(data.message);
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        setToken(data.token);
+        alert("Login successful");
+      } else {
+        alert(data.message || "Login failed");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("Something went wrong");
     }
   };
 

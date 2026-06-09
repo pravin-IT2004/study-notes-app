@@ -15,19 +15,23 @@ function NotesForm({ addNote }) {
     setLoading(true);
 
     try {
-      // ONLY SEND INPUT DATA
-      await addNote({
+      const result = await addNote({
         subject,
         topic,
         type,
       });
 
-      setSubject("");
-      setTopic("");
-      setType("bullet");
+      if (result) {
+        setSubject("");
+        setTopic("");
+        setType("bullet");
+      } else {
+        alert("Failed to generate note");
+      }
 
     } catch (error) {
-      console.log(error);
+      console.error("Generate note error:", error);
+      alert("Server error");
     }
 
     setLoading(false);
