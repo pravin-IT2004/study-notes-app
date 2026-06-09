@@ -6,15 +6,15 @@ const {
   deleteNote,
 } = require("../controllers/noteController");
 
+const authMiddleware = require("../middleware/authMiddleware");
+
 const router = express.Router();
 
-// CREATE NOTE (manual content)
-router.post("/", createNote);
+// 🔐 PROTECTED ROUTES (requires login token)
+router.post("/", authMiddleware, createNote);
 
-// GET ALL NOTES
-router.get("/", getNotes);
+router.get("/", authMiddleware, getNotes);
 
-// DELETE NOTE BY ID
-router.delete("/:id", deleteNote);
+router.delete("/:id", authMiddleware, deleteNote);
 
 module.exports = router;
