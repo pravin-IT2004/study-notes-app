@@ -13,18 +13,21 @@ const createNote = async (req, res) => {
       });
     }
 
+    // 🔐 SAFE USER ID HANDLING (IMPORTANT FIX)
+    const userId = req.user?.id || req.user?._id;
+
     const note = await Note.create({
       subject,
       topic,
       type,
-      generatedText: generatedText || `Generated ${type} notes for ${topic}`,
-
-      // 🔐 IMPORTANT: link note to user
-      userId: req.user.id,
+      generatedText:
+        generatedText || `Generated ${type} notes for ${topic}`,
+      userId,
     });
 
     res.status(201).json(note);
   } catch (error) {
+    console.log("CREATE NOTE ERROR:", error);
     res.status(500).json({
       message: "Server error",
     });
@@ -36,12 +39,15 @@ const createNote = async (req, res) => {
 // ======================
 const getNotes = async (req, res) => {
   try {
-    const notes = await Note.find({ userId: req.user.id }).sort({
+    const userId = req.user?.id || req.user?._id;
+
+    const notes = await Note.find({ userId }).sort({
       createdAt: -1,
     });
 
     res.json(notes);
   } catch (error) {
+    console.log("GET NOTES ERROR:", error);
     res.status(500).json({
       message: "Server error",
     });
@@ -53,9 +59,11 @@ const getNotes = async (req, res) => {
 // ======================
 const deleteNote = async (req, res) => {
   try {
+    const userId = req.user?.id || req.user?._id;
+
     const deletedNote = await Note.findOneAndDelete({
       _id: req.params.id,
-      userId: req.user.id, // 🔐 ensures user can delete only their own note
+      userId,
     });
 
     if (!deletedNote) {
@@ -68,6 +76,7 @@ const deleteNote = async (req, res) => {
       message: "Note deleted successfully",
     });
   } catch (error) {
+    console.log("DELETE NOTE ERROR:", error);
     res.status(500).json({
       message: "Server error",
     });
