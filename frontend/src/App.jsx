@@ -9,14 +9,16 @@ import NotesList from "./components/NotesList";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 
-// ✅ PRODUCTION API URL (Vercel env)
-const API_URL = `${import.meta.env.VITE_API_URL}/api/notes`;
+// ✅ BASE API URL (IMPORTANT: no /api/notes here)
+const BASE_URL = import.meta.env.VITE_API_URL;
+
+const NOTES_API = `${BASE_URL}/api/notes`;
+const AUTH_API = `${BASE_URL}/api/auth`;
 
 function App() {
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // 🔐 AUTH TOKEN
   const [token, setToken] = useState(localStorage.getItem("token"));
 
   // ================= LOAD NOTES =================
@@ -30,7 +32,7 @@ function App() {
 
   const fetchNotes = async () => {
     try {
-      const response = await fetch(API_URL, {
+      const response = await fetch(NOTES_API, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -48,7 +50,7 @@ function App() {
   // ================= ADD NOTE =================
   const addNote = async (note) => {
     try {
-      const response = await fetch(API_URL, {
+      const response = await fetch(NOTES_API, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -67,7 +69,7 @@ function App() {
   // ================= DELETE NOTE =================
   const deleteNote = async (id) => {
     try {
-      await fetch(`${API_URL}/${id}`, {
+      await fetch(`${NOTES_API}/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -104,7 +106,6 @@ function App() {
 
   return (
     <>
-      {/* 🔐 LOGIN / REGISTER */}
       {!token ? (
         <div className="auth-container">
           <h1>Notes Generator</h1>
@@ -139,10 +140,7 @@ function App() {
               <h1>
                 AI-Powered <span>Study Notes</span> Generator
               </h1>
-
-              <p>
-                Turn any topic into structured notes and store them in MongoDB.
-              </p>
+              <p>Turn any topic into structured notes and store them in MongoDB.</p>
             </div>
           </section>
 
@@ -150,7 +148,6 @@ function App() {
           <section className="section">
             <div className="container">
               <h2>Why Students Love It</h2>
-
               <div className="grid">
                 {FEATURES.map((f, i) => (
                   <FeatureCard key={i} {...f} />
@@ -163,7 +160,6 @@ function App() {
           <section className="section alt">
             <div className="container">
               <h2>How It Works</h2>
-
               <div className="steps">
                 {STEPS.map((s, i) => (
                   <StepCard key={i} {...s} />
@@ -191,5 +187,4 @@ function App() {
     </>
   );
 }
-
 export default App;
