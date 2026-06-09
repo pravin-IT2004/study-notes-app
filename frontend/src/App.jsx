@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
 import "./App.css";
+
 import FeatureCard from "./components/FeatureCard";
 import StepCard from "./components/StepCard";
 import NotesForm from "./components/NotesForm";
 import NotesList from "./components/NotesList";
+
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 
-const API_URL = "http://localhost:5000/api/notes";
+// ✅ PRODUCTION API URL (Vercel env)
+const API_URL = `${import.meta.env.VITE_API_URL}/api/notes`;
 
 function App() {
   const [notes, setNotes] = useState([]);
@@ -86,54 +89,32 @@ function App() {
 
   // ================= FEATURES =================
   const FEATURES = [
-    {
-      title: "📄 Smart Notes",
-      desc: "Convert long content into clean, structured study notes instantly.",
-    },
-    {
-      title: "🧠 AI Summarization",
-      desc: "Advanced AI simplifies complex topics into easy explanations.",
-    },
-    {
-      title: "⚡ Fast Output",
-      desc: "Generate notes in seconds with multiple formats.",
-    },
-    {
-      title: "⬇️ Export Anytime",
-      desc: "Download or copy notes for offline study.",
-    },
+    { title: "📄 Smart Notes", desc: "Convert long content into clean study notes instantly." },
+    { title: "🧠 AI Summarization", desc: "Simplifies complex topics." },
+    { title: "⚡ Fast Output", desc: "Generate notes in seconds." },
+    { title: "⬇️ Export Anytime", desc: "Copy or download notes." },
   ];
 
   // ================= STEPS =================
   const STEPS = [
-    {
-      number: "1",
-      title: "Enter Topic",
-      desc: "Provide subject name, topic, or paste content.",
-    },
-    {
-      number: "2",
-      title: "Choose Format",
-      desc: "Select notes type like bullet points, Q & A, or detailed notes.",
-    },
-    {
-      number: "3",
-      title: "Generate",
-      desc: "Click generate and get AI-powered study notes instantly.",
-    },
+    { number: "1", title: "Enter Topic", desc: "Provide subject or topic." },
+    { number: "2", title: "Choose Format", desc: "Bullet / Q&A / detailed." },
+    { number: "3", title: "Generate", desc: "Get AI notes instantly." },
   ];
 
   return (
     <>
-      {/* 🔐 LOGIN / REGISTER SCREEN */}
+      {/* 🔐 LOGIN / REGISTER */}
       {!token ? (
         <div className="auth-container">
           <h1>Notes Generator</h1>
 
-          <Login setToken={(t) => {
-            localStorage.setItem("token", t);
-            setToken(t);
-          }} />
+          <Login
+            setToken={(t) => {
+              localStorage.setItem("token", t);
+              setToken(t);
+            }}
+          />
 
           <Register />
         </div>
@@ -166,45 +147,43 @@ function App() {
           </section>
 
           {/* FEATURES */}
-          <section id="features" className="section">
+          <section className="section">
             <div className="container">
               <h2>Why Students Love It</h2>
 
               <div className="grid">
-                {FEATURES.map((feature, index) => (
-                  <FeatureCard key={index} {...feature} />
+                {FEATURES.map((f, i) => (
+                  <FeatureCard key={i} {...f} />
                 ))}
               </div>
             </div>
           </section>
 
           {/* STEPS */}
-          <section id="how" className="section alt">
+          <section className="section alt">
             <div className="container">
               <h2>How It Works</h2>
 
               <div className="steps">
-                {STEPS.map((step, index) => (
-                  <StepCard key={index} {...step} />
+                {STEPS.map((s, i) => (
+                  <StepCard key={i} {...s} />
                 ))}
               </div>
             </div>
           </section>
 
           {/* NOTES */}
-          <section id="generator" className="section">
+          <section className="section">
             <div className="container">
               <h2>Create Your Notes</h2>
 
-              <div className="generator">
-                <NotesForm addNote={addNote} />
+              <NotesForm addNote={addNote} />
 
-                {loading ? (
-                  <p>Loading notes...</p>
-                ) : (
-                  <NotesList notes={notes} deleteNote={deleteNote} />
-                )}
-              </div>
+              {loading ? (
+                <p>Loading notes...</p>
+              ) : (
+                <NotesList notes={notes} deleteNote={deleteNote} />
+              )}
             </div>
           </section>
         </>

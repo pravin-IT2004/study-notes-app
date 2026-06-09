@@ -1,11 +1,8 @@
-require("dotenv").config(); // MUST BE FIRST LINE
+require("dotenv").config();
 
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-
-// DEBUG: check env loading
-console.log("JWT SECRET CHECK:", process.env.JWT_SECRET);
 
 // Routes
 const noteRoutes = require("./routes/noteRoutes");
@@ -14,16 +11,44 @@ const authRoutes = require("./routes/authRoutes");
 const app = express();
 
 // ======================
+// ENV CHECK
+// ======================
+console.log("Server starting...");
+console.log("JWT loaded:", !!process.env.JWT_SECRET);
+
+// ======================
 // MIDDLEWARE
 // ======================
-app.use(cors());
 app.use(express.json());
+
+// ======================
+// CORS
+// ======================
+const allowedOrigins = [
+  "http://localhost:5173",
+  process.env.CLIENT_URL,
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("Not allowed by CORS"));
+    },
+    credentials: true,
+  })
+);
 
 // ======================
 // TEST ROUTE
 // ======================
 app.get("/", (req, res) => {
-  res.send("Backend Server Running");
+  res.send("Backend Server Running 🚀");
 });
 
 // ======================
