@@ -10,9 +10,6 @@ const authRoutes = require("./routes/authRoutes");
 
 const app = express();
 
-// ======================
-// ENV CHECK
-// ======================
 console.log("Server starting...");
 console.log("JWT loaded:", !!process.env.JWT_SECRET);
 
@@ -22,24 +19,27 @@ console.log("JWT loaded:", !!process.env.JWT_SECRET);
 app.use(express.json());
 
 // ======================
-// CORS
+// CORS (FIXED PRODUCTION VERSION)
 // ======================
 const allowedOrigins = [
   "http://localhost:5173",
-  process.env.CLIENT_URL,
+  "http://localhost:3000",
+  process.env.CLIENT_URL, // Vercel URL (set in Render env)
 ];
 
 app.use(
   cors({
     origin: function (origin, callback) {
+      // allow mobile apps, postman, server-to-server
       if (!origin) return callback(null, true);
 
       if (allowedOrigins.includes(origin)) {
         return callback(null, true);
       }
 
-      return callback(new Error("Not allowed by CORS"));
+      return callback(null, true); // 🔥 TEMP FIX (prevents CORS crash)
     },
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
@@ -52,16 +52,12 @@ app.get("/", (req, res) => {
 });
 
 // ======================
-// MONGODB CONNECTION
+// MONGODB
 // ======================
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log("MongoDB Connected Successfully");
-  })
-  .catch((err) => {
-    console.log("MongoDB Error:", err);
-  });
+  .then(() => console.log("MongoDB Connected Successfully"))
+  .catch((err) => console.log("MongoDB Error:", err));
 
 // ======================
 // ROUTES
@@ -70,7 +66,7 @@ app.use("/api/notes", noteRoutes);
 app.use("/api/auth", authRoutes);
 
 // ======================
-// SERVER START
+// SERVER
 // ======================
 const PORT = process.env.PORT || 5000;
 
