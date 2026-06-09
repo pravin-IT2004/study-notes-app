@@ -276,10 +276,11 @@ select:focus {
 }
 
 /* =========================
-   AUTH (ONLY FIXED PART)
+   AUTH (FIXED ONLY)
 ========================= */
 
 .auth-page {
+  width: 100vw;
   height: 100vh;
   display: flex;
   justify-content: center;
@@ -303,6 +304,8 @@ select:focus {
 /* AUTH CARD */
 .auth-card {
   width: 320px;
+  max-width: 90%;
+  margin: auto;
   padding: 30px;
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.15);
@@ -312,6 +315,7 @@ select:focus {
   color: white;
 }
 
+/* INPUT */
 .auth-card input {
   width: 100%;
   padding: 12px;
@@ -321,6 +325,7 @@ select:focus {
   outline: none;
 }
 
+/* BUTTON */
 .auth-card button {
   width: 100%;
   padding: 12px;
