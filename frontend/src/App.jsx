@@ -121,20 +121,16 @@ function App() {
         </div>
       ) : (
         <>
-          {/* HEADER */}
           <header className="header">
             <div className="container header-container">
               <a href="#home" className="logo">
                 Notes<span>Generator</span><em>.</em>
               </a>
-
               <button onClick={logout} className="btn-primary">
                 Logout
               </button>
             </div>
           </header>
-
-          {/* HERO */}
           <section id="home" className="hero">
             <div className="hero-content container">
               <h1>
@@ -143,8 +139,6 @@ function App() {
               <p>Turn any topic into structured notes and store them in MongoDB.</p>
             </div>
           </section>
-
-          {/* FEATURES */}
           <section className="section">
             <div className="container">
               <h2>Why Students Love It</h2>
@@ -155,8 +149,6 @@ function App() {
               </div>
             </div>
           </section>
-
-          {/* STEPS */}
           <section className="section alt">
             <div className="container">
               <h2>How It Works</h2>
@@ -167,8 +159,6 @@ function App() {
               </div>
             </div>
           </section>
-
-          {/* NOTES */}
           <section className="section">
             <div className="container">
               <h2>Create Your Notes</h2>
