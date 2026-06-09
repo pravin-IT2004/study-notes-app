@@ -21,33 +21,32 @@ function Login({ setToken }) {
         setToken(data.token);
         alert("Login successful");
       } else {
-        alert(data.message || "Login failed");
+        alert(data.message);
       }
-    } catch (error) {
-      console.error("Login error:", error);
-      alert("Something went wrong");
+    } catch {
+      alert("Login failed");
     }
   };
 
   return (
-    <div className="auth-page login">
-      <div className="auth-card">
-        <h2>👋 Welcome Back</h2>
-        <p>Login to continue</p>
+    <div className="auth-card">
+      <h2>Login</h2>
 
-        <input
-          placeholder="Email"
-          onChange={(e) => setEmail(e.target.value)}
-        />
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
 
-        <input
-          type="password"
-          placeholder="Password"
-          onChange={(e) => setPassword(e.target.value)}
-        />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
 
-        <button onClick={handleLogin}>Login</button>
-      </div>
+      <button onClick={handleLogin}>Login</button>
     </div>
   );
 }

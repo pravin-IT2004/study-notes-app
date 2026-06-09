@@ -17,36 +17,37 @@ function Register() {
 
       const data = await res.json();
       alert(data.message || "Registered successfully");
-    } catch (error) {
-      console.error("Register error:", error);
-      alert("Something went wrong");
+    } catch {
+      alert("Register failed");
     }
   };
 
   return (
-    <div className="auth-page register">
-      <div className="auth-card">
-        <h2>🚀 Create Account</h2>
-        <p>Start your AI Notes journey</p>
+    <div className="auth-card">
+      <h2>Register</h2>
 
-        <input
-          placeholder="Name"
-          onChange={(e) => setName(e.target.value)}
-        />
+      <input
+        type="text"
+        placeholder="Name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
 
-        <input
-          placeholder="Email"
-          onChange={(e) => setEmail(e.target.value)}
-        />
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
 
-        <input
-          type="password"
-          placeholder="Password"
-          onChange={(e) => setPassword(e.target.value)}
-        />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
 
-        <button onClick={handleRegister}>Register</button>
-      </div>
+      <button onClick={handleRegister}>Register</button>
     </div>
   );
 }
